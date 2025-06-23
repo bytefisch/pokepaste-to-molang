@@ -1,0 +1,11 @@
+Tyranitar @ Choice Band
+Ability: Sand Stream
+Level: 75
+Shiny: No
+Happiness: 0
+EVs: 252 HP / 252 Atk / 4 SpD
+Adamant Nature
+- Earthquake
+- Stone Edge
+- Superpower
+- Crunch
