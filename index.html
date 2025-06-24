@@ -5,12 +5,410 @@
         <title>pokepaste-to-molang</title>
     </head>
     <script>
+        let forms_map = {
+            "alola": "alolan",
+            "galar": "galarian",
+            "hisui": "hisuian",
+            
+            "gmax": "gmax",
+            "mega": "mega",
+            "mega-x": "mega_x",
+            "mega-y": "mega_y",
+            
+            // ------------------
+
+            // Wormadam
+            "plant": "bagworm_cloak=plant", // psd doesn't add -plant, but cobblemon defaults to it anyway
+            "sandy": "bagworm_cloak=sandy",
+            "trash": "bagworm_cloak=trash",
+
+            // Greninja
+            "bond": "battle_bond=bond",
+            "ash": "battle_bond=ash",
+
+            // Zacian/Zamazenta
+            "crowned": "behemoth_warrior=crowned",
+
+            // Darmanitan
+            "zen": "blazing_mode=zen",
+            "galar-zen": "galarian blazing_mode=zen",
+
+            // Ursaluna
+            "bloodmoon": "bloodmoon",
+
+            // Cherrim
+            "sunshine": "blossom_form=sunshine",
+
+            // Wooloo/Dubwool
+            // TODO
+
+            // Minior
+            // This is going to conflict with Dubwool later zzz
+            "red": "core_color=red",
+            "orange": "core_color=orange",
+            "yellow": "core_color=yellow",
+            "green": "core_color=green",
+            "blue": "core_color=blue",
+            "indigo": "core_color=indigo",
+            "violet": "core_color=violet",
+            // "core": "meteor_shield=core",
+            "meteor": "meteor_shield=meteor", // Unnecessary?
+
+            // Alcremie
+            // TODO: Showdown doesn't specify Vanilla-Cream
+            // But Cobblemon randomizes if you don't specify it.
+            "vanilla-cream": "cream=vanilla", // issue
+            "ruby-cream": "cream=ruby",
+            "matcha-cream": "cream=matcha",
+            "mint-cream": "cream=mint",
+            "lemon-cream": "cream=lemon",
+            "salted-cream": "cream=salted",
+            "ruby_swirl": "cream=ruby_swirl",
+            "caramel_swirl": "cream=caramel_swirl",
+            "rainbow_swirl": "cream=rainbow_swirl",
+            // TODO: Decorations not available on Showdown
+            "strawberry": "decoration=strawberry",
+            "berry": "decoration=berry",
+            "love": "decoration=love",
+            "star": "decoration=star",
+            "clover": "decoration=clover",
+            "flower": "decoration=flower",
+            "ribbon": "decoration=ribbon",
+
+            // Hoopa
+            "confined": "djinn_state=confined", // Showdown default
+            "unbound": "djinn_state=unbound",
+
+            // Tornadus/Thundurus/Landorus/Enamorus
+            "incarnate": "mirror_forme=incarnate", // Showdown default
+            "therian": "mirror_forme=therian",
+
+            // Basculin
+            "red-striped": "fish_stripes=red", // Showdown default
+            "blue-striped": "fish_stripes=blue",
+            "white-striped": "fish_stripes=white",
+
+            // Florges line
+            // TODO: Color conflicts
+            // "red": "flower=red", // Showdown default
+            // "yellow": "flower=yellow",
+            // "orange": "flower=orange",
+            // "blue": "flower=blue",
+            // "white": "flower=white",
+            // "pink": "flower=pink", // Pink? Does another Pokemon share this feature?
+            "eternal": "flower=eternal", // Floette only
+
+            // Castform
+            // "normal": "forecast_form=normal", // Showdown default, redundant?, conflicts with Deoxys
+            "sunny": "forecast_form=sunny",
+            "rainy": "forecast_form=rainy",
+            "snowy": "forecast_form=snowy",
+
+            // TODO: Gimmighoul coins/natherite
+
+            // Shaymin
+            "land": "gracidea_forme=land", // Showdown default
+            "sky": "gracidea_forme=sky", 
+
+            // Palafin?
+            "hero": "hero=true",
+
+            // Morpeko?
+            "full_belly": "hunger_mode=full_belly",
+            "hangry": "hunger_mode=hangry",
+
+            // Dudunsparce
+            "two-segment": "landsnake_form=two-segment",
+            "three-segment": "landsnake_form=three-segment",
+
+            // Oricorio
+            "baile": "dance_style=baile",
+            "pom_pom": "dance_style=pom_pom",
+            "pa'u": "dance_style=pa'u",
+            "sensu": "dance_style=sensu",
+
+            // Pikachu
+            "original": "league_cap=original",
+            "hoenn": "league_cap=hoenn",
+            "sinnoh": "league_cap=sinnoh",
+            "unova": "league_cap=unova",
+            "kalos": "league_cap=kalos",
+            // "alola": "league_cap=alola", // Conflicts with Alolan/regional bias
+            "partner": "league_cap=partner",
+            "world": "league_cap=world",
+            // No cosplay/pikachu variants?
+
+            // Life mode?
+            // https://gitlab.com/cable-mc/cobblemon/-/blob/1.6.1/common/src/main/resources/data/cobblemon/species_features/life_mode.json?ref_type=tags
+
+            // Sinischa / Poltchageist
+            "counterfeit": "matcha_authenticity=counterfeit", // Showdown default
+            "artisan": "matcha_authenticity=artisan",
+            "unremarkable": "matcha_authenticity=unremarkable", // Showdown default
+            "masterpiece": "matcha_authenticity=masterpiece",
+
+            // Maushold
+            "three": "maushold_family=three", // Showdown default
+            "four": "maushold_family=four",
+
+            // Metals - ?
+            "copper": "metals=copper",
+            "iron": "metals=iron",
+            "gold": "metals=gold",
+            "netherite": "metals:netherite",
+
+            // Deoxys
+            "normal": "meteorite_forme=normal",
+            "attack": "meteorite_forme=attack",
+            "defense": "meteorite_forme=defense",
+            "speed": "meteorite_forme=speed",
+
+            // Minecraft
+            "minecraft": "minecraft",
+
+            // Cramorant, unnecessary?
+            "gorging": "missile_form=gorging",
+            "gulping": "missile_form=gulping",
+
+            // Miltank
+            // "red": "mooshtank=red",
+            // "brown": "mooshtank=brown",
+
+            // Arceus?
+            "fighting": "multitype=fighting",
+            "flying": "multitype=flying",
+            "poison": "multitype=poison",
+            "ground": "multitype=ground",
+            "rock": "multitype=rock",
+            "bug": "multitype=bug",
+            "ghost": "multitype=ghost",
+            "steel": "multitype=steel",
+            "fire": "multitype=fire",
+            "water": "multitype=water",
+            "grass": "multitype=grass",
+            "electric": "multitype=electric",
+            "psychic": "multitype=psychic",
+            // "ice": "multitype=", // conflicts with Calyrex-Ice
+            "dragon": "multitype=dragon",
+            "dark": "multitype=dark",
+            "fairy": "multitype=fairy",
+
+            // Dialga/Palka/Giratina
+            "origin": "orb_forme=origin",
+
+            // Patterns?
+            // https://gitlab.com/cable-mc/cobblemon/-/blob/1.6.1/common/src/main/resources/data/cobblemon/species_features/pattern.json?ref_type=tags
+            // TODO: conflicts with region forms
+
+            // Zygarde
+            "50%": "percent_cells=50", // Showdown default
+            "10%": "percent_cells=10",
+            "complete": "percent_cells=complete",
+            
+            // Poodle dog
+            "natural": "poodle_trim=natural", // Showdown default
+            "heart": "poodle_trim=heart",
+            // "star": "poodle_trim=star", // conflicts with Alcremie decoration
+            "diamond": "poodle_trim=diamond",
+            "debutante": "poodle_trim=debutante",
+            "matron": "poodle_trim=matron",
+            "dandy": "poodle_trim=dandy",
+            "lareine": "poodle_trim=la_reine",
+            "kabuki": "poodle_trim=kabuki",
+            "pharaoh": "poodle_trim=pharaoh",
+
+            // Power construct?
+            // https://gitlab.com/cable-mc/cobblemon/-/blob/1.6.1/common/src/main/resources/data/cobblemon/species_features/power_construct.json?ref_type=tags
+
+            // Necrozma
+            "dawn-wings": "prism_fusion=dawn",
+            "dusk-mane": "prism_fusion=dusk",
+            "ultra": "prism_fusion=ultra",
+
+            // Pumpkaboo/Gourgeist
+            "average": "pumpkin_size=average", // Showdown default
+            "small": "pumpkin_size=small",
+            "large": "pumpkin_size=large",
+            "super": "pumpkin_size=super",
+
+            // Toxtricity
+            "low-key": "punk_form=low_key",
+            "low-key-gmax": "punk_form=low_key gmax",
+
+            // Groudon/Kyogre
+            "primal": "reversion_state=primal",
+
+            // Type Null
+            // https://gitlab.com/cable-mc/cobblemon/-/blob/1.6.1/common/src/main/resources/data/cobblemon/species_features/rks_memory.json?ref_type=tags
+            // conflicts with Arceus
+
+            // Roaming?
+            // Gimmighoul???
+            "roaming": "roaming",
+
+            // Zarude
+            "dada": "rogue_cape=dada",
+
+            // Shellos/Gastrodon
+            "west": "sea=west", // Showdown default
+            "east": "sea=east",
+
+            // Deerling/Sawsbuck
+            "spring": "season=spring",
+            "summer": "season=summer",
+            "autumn": "season=autumn",
+            "winter": "season=winter",
+
+            // Forretress
+            "shulker": "shulker",
+
+            // Arbok
+            // Several of these conflict with above keys
+            "classic": "snake_pattern=classic",
+            "legacy": "snake_pattern=legacy",
+            // "attack": "snake_pattern=attack",
+            // "dark": "snake_pattern=dark",
+            "elusive": "snake_pattern=elusive",
+            // "heart": "snake_pattern=heart",
+            // "speed": "snake_pattern=speed",
+            "sound": "snake_pattern=sound",
+
+            // Meloetta
+            "aria": "song_forme=aria",
+            "pirouette": "song_forme=pirouette",
+
+            // Squawkabilly
+            // Color conflicts
+            // "green": "squawkabilly_color=green", // Showdown default
+            // "blue": "squawkabilly_color=blue",
+            // "yellow": "squawkabilly_color=yellow",
+            "gray": "squawkabilly_color=gray",
+
+            // Aegislash, unnecessary?
+            "shield": "stance_forme=shield", // Showdown default
+            "blade": "stance_forme=blade",
+
+            // Keldeo
+            "ordinary": "sword_form=ordinary", // Showdown default
+            "resolute": "sword_form=resolute",
+
+            // Tatsugiri
+            "curly": "tatsugiri_texture=curly", // Showdown default
+            "droopy": "tatsugiri_texture=droopy",
+            "stretchy": "tatsugiri_texture=stretchy",
+
+            // Sinistea/Polteageist
+            "phony": "tea_authenticity=phony", // Showdown default
+            "antique": "tea_authenticity=antique",
+
+            // Genesect
+            "burn": "techno_drive=fire",
+            "chill": "techno_drive=ice",
+            "douse": "techno_drive=water",
+            "shock": "techno_drive=shock",
+
+            // Terapagos
+            // Is this necessary?
+            // "normal": "tera_form=normal", // Showdown default, conflicts with others
+            "terastal": "tera_form=terastal",
+            "stellar": "tera_form=stellar",
+
+            // Torterra
+            "oak": "tree=oak",
+            "birch": "tree=birch",
+            "darkoak": "tree=darkoak",
+            "acacia": "tree=acacia",
+            "azalea": "tree=azalea",
+            "swamp": "tree=swamp",
+            "jungle": "tree=jungle",
+            "spruce": "tree=spruce",
+            "mangrove": "tree=mangrove",
+            "cherry": "tree=cherry",
+            "apricorn": "tree=apricorn",
+            "crimson": "tree=crimson",
+            "warped": "tree=warped",
+
+            // Oddish/Caterpie lines
+            "valencian": "valencian",
+
+            // Vivillon <3
+            "icysnow": "vivillon_wings=icy-snow",
+            "polar": "vivillon_wings=polar",
+            "tundra": "vivillon_wings=tundra",
+            "continental": "vivillon_wings=continental",
+            "garden": "vivillon_wings=garden",
+            "elegant": "vivillon_wings=elegant",
+            "meadow": "vivillon_wings=meadow", // Showdown default
+            "modern": "vivillon_wings=modern",
+            "marine": "vivillon_wings=marine",
+            "archipelago": "vivillon_wings=archipelago",
+            "highplains": "vivillon_wings=high-plains",
+            "sandstorm": "vivillon_wings=sandstorm",
+            "river": "vivillon_wings=river",
+            "monsoon": "vivillon_wings=monsoon",
+            "savanna": "vivillon_wings=savanna",
+            "sun": "vivillon_wings=sun",
+            "ocean": "vivillon_wings=ocean",
+            // "jungle": "vivillon_wings=jungle", // Conflicts with Torterra
+            "fancy": "vivillon_wings=fancy",
+            "pokeball": "vivillon_wings=pokeball",
+            "inferno": "vivillon_wings=inferno",
+            "void": "vivillon_wings=void",
+            "forsaken": "vivillon_wings=forsaken",
+
+            // Whiscash (not Barboach)
+            "nero": "whiscash_nero",
+            
+            // Lycanroc
+            "midday": "wolf_form=midday", // Showdown default
+            "midnight": "wolf_form=midnight",
+            "dusk": "wolf_form=dusk",
+
+            // Wooper
+            // "heart": "wooper_heart", // Conflicts with others above
+
+            // Urshifu
+            "single-strike": "wushu_style=single_strike", // Showdown default
+            "rapid-strike": "wushu_style=rapid_strike",
+            "single-strike-gmax": "gmax wushu_style=single_strike",
+            "rapid-strike-gmax": "gmax wushu_style=rapid_strike",
+
+            // Rotom
+            "fan": "appliance=fan",
+            "frost": "appliance=frost",
+            "heat": "appliance=heat",
+            "mow": "appliance=mow",
+            "wash": "appliance=wash",
+            
+            // Calyrex
+            "ice": "king_steed=ice",
+            "shadow": "king_steed=shadow",
+
+            // Tauros-Paldea
+            "paldea-combat": "paldean bull_breed=combat",
+            "paldea-aqua": "paldean bull_breed=aqua",
+            "paldea-blaze": "paldean bull_breed=blaze",
+
+            // Ogrepon masks
+            "teal": "ogre_mask=teal",
+            "wellspring": "ogre_mask=wellspring",
+            "hearthflame": "ogre_mask=hearthflame",
+            "cornerstone": "ogre_mask=cornerstone"
+        };
+
+        function get_species_features_old() {
+            // https://gitlab.com/cable-mc/cobblemon/-/tree/1.6.1/common/src/main/resources/data/cobblemon/species/generation1?ref_type=tags
+            // https://gitlab.com/cable-mc/cobblemon/-/tree/1.6.1/common/src/main/resources/data/cobblemon/species_features?ref_type=tags
+            
+        }
+
         function convert() {
-            var pokemon = [];
             var default_pokemon = {
                 "species": "ditto",
+                "form": "",
                 "held_item": "",
                 "ability": "imposter",
+                "teratype": "",
                 "level": 100,
                 "shiny": false,
                 "happiness": 0,
@@ -25,9 +423,9 @@
                 "ivs": {
                     "hp_iv": 31,
                     "attack_iv": 31,
-                    "defense_iv": 31,
+                    "defence_iv": 31,
                     "special_attack_iv": 31,
-                    "special_defense_iv": 31,
+                    "special_defence_iv": 31,
                     "speed_iv": 31
                 },
                 "nature": "lax",
@@ -40,21 +438,23 @@
                 "uncatchable": true
             };
 
+            let eviv_map = {
+                "hp": "hp",
+                "atk": "attack",
+                "def": "defence",
+                "spa": "special_attack",
+                "spd": "special_defence",
+                "spe": "speed"
+            };
+
+            
+
+            var pokemon = [];
             for (var i = 0; i < 6; i++) {
                 pokemon.push(structuredClone(default_pokemon));
             }
 
-            let eviv_map = {
-                "hp": "hp",
-                "atk": "attack",
-                "def": "defense",
-                "spa": "special_attack",
-                "spd": "special_defense",
-                "spe": "speed"
-            };
-
             var lines = document.getElementById("pokepaste_input").value.split("\n");
-            console.log(lines);
             
             var current_pokemon = -1;
             var move_count = 0;
@@ -66,7 +466,23 @@
                     current_pokemon++;
                     move_count = 0;
                     let species_and_item = test.toLowerCase().split(" @ ");
-                    pokemon[current_pokemon]["species"] = species_and_item[0];
+
+                    // I really just need what comes before the first - and everything after it I guess...
+                    let species_and_maybe_form = species_and_item[0].replace(" ", "").split("-");
+
+                    var species;
+                    if (species_and_maybe_form.length > 1 && species_and_maybe_form[1] in forms_map) {
+                        // Potential form present
+                        species = species_and_maybe_form[0];
+                        pokemon[current_pokemon]["form"] = forms_map[species_and_maybe_form[1]];
+                    } else {
+                        // redundancy with above
+                        species = species_and_item[0].replace(" ", "").replace("-", "");
+                    }
+
+                    console.log(species);
+
+                    pokemon[current_pokemon]["species"] = species;
                     let item = species_and_item[1].replace(" ", "_");
                     pokemon[current_pokemon]["held_item"] = "cobblemon:" + item;
                     continue;
@@ -80,7 +496,7 @@
                 // try split by ": "
                 test = lines[i].toLowerCase().split(": ");
                 if (test.length > 1) { // # it was a : line
-                    let attr = test[0];
+                    let attr = test[0].replace(" ", "");
                     if (attr == "evs") {
                         let stats = test[1].trim().split(" ");
                         var current_ev = -1;
@@ -116,6 +532,8 @@
                         }
                     }
                     else {
+                        console.log(test[0] + ": " + test[1]);
+                        if (!(attr in pokemon[current_pokemon])) break;
                         if (typeof(pokemon[current_pokemon][attr]) == "boolean") {
                             if (test[1] == "yes") {
                                 pokemon[current_pokemon][attr] = true
@@ -157,6 +575,15 @@
 
                 output += pokemon[i]["species"]
                 output += " "
+
+                if (pokemon[i]["form"] != "") {
+                    output += pokemon[i]["form"]
+                    output += " "
+                }
+
+                if (pokemon[i]["teratype"] != "") {
+                    output += "teratype=" + pokemon[i]["teratype"] + " "
+                }
 
                 var moves_text = ""
                 for (let key in pokemon[i]["moves"]) {
