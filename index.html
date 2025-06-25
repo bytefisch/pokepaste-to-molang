@@ -571,7 +571,15 @@
             var output = ""
             for (var i = 0; i < pokemon_count; i++) {
                 console.log(pokemon[i]);
-                output += "q.party.add_by_properties(\'"
+
+                var output_type = document.getElementById("output_type").value;
+                if (output_type == "molang_party") {
+                    output += "q.party.add_by_properties(\'";
+                } else if (output_type == "give_command") {
+                    output += "/givepokemon ";
+                } else if (output_type == "spawn_command") {
+                    output += "/spawnpokemon ";
+                }
 
                 output += pokemon[i]["species"]
                 output += " "
@@ -628,7 +636,11 @@
                 }
 
                 output = output.substring(0, output.length - 1)
-                output += "\');\n"
+
+                if (output_type == "molang_party") {
+                    output += "\');"
+                }
+                output += "\n";
             }
 
             document.getElementById("molang_output").value = output;
@@ -649,6 +661,11 @@
         <textarea id="pokepaste_input" name="pokepaste_input" rows="20" cols="50" autofocus></textarea>
         <br><br>
         <button onclick="convert()">Convert</button>
+        <select name="output_type" id="output_type">
+            <option value="molang_party">Molang Party Addition</option>
+            <option value="give_command">/givepokemon Command</option>
+            <option value="spawn_command">/spawnpokemon Command</option>
+        </select>
         <br><br>
         <label>Molang:</label>
         <br>
