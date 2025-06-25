@@ -598,9 +598,11 @@
                     output += "moves=" + moves_text.substring(0, moves_text.length-1) + " "
                 }
 
-                output += "nature="
-                output += pokemon[i]["nature"]
-                output += " "
+                if (pokemon[i]["nature"] != "") {
+                    output += "nature="
+                    output += pokemon[i]["nature"]
+                    output += " "
+                }
 
                 output += "held_item=" // insufficient but leave it for now...
                 output += pokemon[i]["held_item"]
