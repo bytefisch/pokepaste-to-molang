@@ -480,8 +480,6 @@
                         species = species_and_item[0];
                     }
 
-                    console.log(species);
-
                     pokemon[current_pokemon]["species"] = species.replace(" ", "").replace("-", "").replace("’", "");
                     let item = species_and_item[1].replace(" ", "_");
                     pokemon[current_pokemon]["held_item"] = "cobblemon:" + item;
@@ -532,7 +530,6 @@
                         }
                     }
                     else {
-                        console.log(test[0] + ": " + test[1]);
                         if (!(attr in pokemon[current_pokemon])) break;
                         if (typeof(pokemon[current_pokemon][attr]) == "boolean") {
                             if (test[1] == "yes") {
@@ -566,12 +563,10 @@
                 }
             }
 
-            // Convert the dictionary into molang
+            // Convert the dictionary into a big string for output
             let pokemon_count = current_pokemon + 1;
             var output = ""
             for (var i = 0; i < pokemon_count; i++) {
-                console.log(pokemon[i]);
-
                 var output_type = document.getElementById("output_type").value;
                 if (output_type == "molang_party") {
                     output += "q.party.add_by_properties(\'";
@@ -643,7 +638,7 @@
                 output += "\n";
             }
 
-            document.getElementById("molang_output").value = output;
+            document.getElementById("output_textarea").value = output;
         }
     </script>
 
@@ -654,7 +649,11 @@
             <li>Paste your pokepaste from Pokemon Showdown etc. into the first text box.</li>
             <li>Press "Convert".</li>
             <li>Copy the result from the second text box.</li>
-            <li>Paste it into a Molang script file for use in Cobblemon.</li>
+            <li>Then</li>
+            <ul>
+                <li>If given a command, paste it into your chat in Minecraft and press Enter.</li>
+                <li>If given Molang, paste it into your file(s) for use with NPCs.</li>
+            </ul>
         </ol>
         <label for="fname">Pokepaste:</label>
         <br>
@@ -662,13 +661,13 @@
         <br><br>
         <button onclick="convert()">Convert</button>
         <select name="output_type" id="output_type">
-            <option value="molang_party">Molang Party Addition</option>
             <option value="give_command">/givepokemon Command</option>
             <option value="spawn_command">/spawnpokemon Command</option>
+            <option value="molang_party">Molang Party Addition</option>
         </select>
         <br><br>
-        <label>Molang:</label>
+        <label>Result:</label>
         <br>
-        <textarea id="molang_output" name="molang_output" rows="20" cols="50" disabled></textarea>
+        <textarea id="output_textarea" name="output_textarea" rows="20" cols="50" disabled></textarea>
     </body>
 </html>
