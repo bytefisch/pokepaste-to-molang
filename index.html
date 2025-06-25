@@ -477,12 +477,12 @@
                         pokemon[current_pokemon]["form"] = forms_map[species_and_maybe_form[1]];
                     } else {
                         // redundancy with above
-                        species = species_and_item[0].replace(" ", "").replace("-", "");
+                        species = species_and_item[0];
                     }
 
                     console.log(species);
 
-                    pokemon[current_pokemon]["species"] = species;
+                    pokemon[current_pokemon]["species"] = species.replace(" ", "").replace("-", "").replace("’", "");
                     let item = species_and_item[1].replace(" ", "_");
                     pokemon[current_pokemon]["held_item"] = "cobblemon:" + item;
                     continue;
