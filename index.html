@@ -429,12 +429,12 @@
                     "speed_iv": 31
                 },
                 "nature": "",
-                "moves": {
-                    "move1": "",
-                    "move2": "",
-                    "move3": "",
-                    "move4": ""
-                },
+                "moves": [
+                    "",
+                    "",
+                    "",
+                    ""
+                ],
                 "uncatchable": true
             };
 
@@ -457,14 +457,14 @@
             var lines = document.getElementById("pokepaste_input").value.split("\n");
             
             var current_pokemon = -1;
-            var move_count = 0;
+            var move_count = -1;
             for (var i = 0; i < lines.length; i++) {
                 // check for new Pokemon
                 lines[i] = lines[i].trim();
                 var test = lines[i];
                 if (test.includes("@")) {
                     current_pokemon++;
-                    move_count = 0;
+                    move_count = -1;
                     let species_and_item = test.toLowerCase().split(" @ ");
 
                     // I really just need what comes before the first - and everything after it I guess...
@@ -553,15 +553,18 @@
                     continue;
                 }
 
+                console.log(pokemon[0]["moves"])
                 // check for moves
                 test = lines[i].replace(/ /gi, "").toLowerCase();
-                if (test[0] == "-") {
+                if (test[0] == "-" && test.length > 1) {
                     move_count++;
                     if (move_count > 4) continue;
-                    pokemon[current_pokemon]["moves"]["move" + move_count] = test.substring(1, test.length);
+                    pokemon[current_pokemon]["moves"][move_count] = test.substring(1, test.length);
                     continue;
                 }
             }
+
+            console.log(pokemon[0]["moves"])
 
             // Convert the dictionary into a big string for output
             let pokemon_count = current_pokemon + 1;
@@ -588,12 +591,24 @@
                     output += "teratype=" + pokemon[i]["teratype"] + " "
                 }
 
-                var moves_text = ""
-                for (let key in pokemon[i]["moves"]) {
-                    if (pokemon[i]["moves"][key].length > 0) {
-                        moves_text += pokemon[i]["moves"][key] + ","
+                var moves_text = "";
+                var last_move = -1;
+                for (var j = 0; j < 4; j++)
+                {
+                    console.log(pokemon[i]["moves"][j])
+                    if (pokemon[i]["moves"][j].length > 0) {
+                        moves_text += pokemon[i]["moves"][j] + ",";
+                        last_move++;
+                    } else if (last_move >= 0) {
+                        moves_text += pokemon[i]["moves"][last_move] + ",";
                     }
                 }
+                // for (let key in pokemon[i]["moves"]) {
+                //     if (pokemon[i]["moves"][key].length > 0) {
+                //         moves_text += pokemon[i]["moves"][key] + ","
+                //     }
+                // }
+
                 if (moves_text.length > 0) {
                     output += "moves=" + moves_text.substring(0, moves_text.length-1) + " "
                 }
